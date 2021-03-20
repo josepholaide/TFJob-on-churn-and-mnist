@@ -93,8 +93,8 @@ def main(args):
   # number of steps per epoch. Note that the numbers here are for demonstration
   # purposes only and may not sufficiently produce a model with good quality.
   multi_worker_model.fit(train_datasets_sharded,
-                         epochs=4,
-                         steps_per_epoch=70,
+                         epochs=7,
+                         steps_per_epoch=30,
                          callbacks=callbacks)
   
   eval_loss, eval_acc = multi_worker_model.evaluate(test_dataset_sharded, 
