@@ -17,7 +17,7 @@ spec:
           containers:
           - name: tensorflow
             # modify this property if you would like to use a custom image
-            image: mavencodev/tfjob:5.0
+            image: mavencodev/tf_job:5.0
             command:
                 - "python"
                 - "/tfjob.py"
