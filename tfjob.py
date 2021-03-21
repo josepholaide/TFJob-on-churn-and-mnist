@@ -59,7 +59,7 @@ def main(args):
   strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy(
       communication=tf.distribute.experimental.CollectiveCommunication.AUTO)
   logging.debug(f"num_replicas_in_sync: {strategy.num_replicas_in_sync}")
-  BATCH_SIZE_PER_REPLICA = 128
+  BATCH_SIZE_PER_REPLICA = args.batch_size
   BATCH_SIZE = BATCH_SIZE_PER_REPLICA * strategy.num_replicas_in_sync
 
   train_dataset, test_dataset = make_datasets_unbatched()
@@ -107,6 +107,13 @@ def main(args):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
+  parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=64,
+        metavar="N",
+        help="Batch size for training (default: 64)",
+    )
   parser.add_argument("--learning_rate", 
                       type=float,  
                       default=0.001,
