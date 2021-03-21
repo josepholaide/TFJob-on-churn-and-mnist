@@ -77,25 +77,12 @@ def main(args):
     # Model building/compiling need to be within `strategy.scope()`.
     multi_worker_model = model(args)
 
-  # Callback for printing the LR at the end of each epoch.
-  class PrintLR(tf.keras.callbacks.Callback):
-
-    def on_epoch_end(self, epoch, logs=None): #pylint: disable=no-self-use
-      print('\nLearning rate for epoch {} is {}'.format(
-        epoch + 1, multi_worker_model.optimizer.lr.numpy()))
-
-  callbacks = [
-      tf.keras.callbacks.TensorBoard(log_dir='./logs'),
-      PrintLR()
-   ]
-
   # Keras' `model.fit()` trains the model with specified number of epochs and
   # number of steps per epoch. Note that the numbers here are for demonstration
   # purposes only and may not sufficiently produce a model with good quality.
   multi_worker_model.fit(train_datasets_sharded,
                          epochs=10,
-                         steps_per_epoch=10,
-                         callbacks=callbacks)
+                         steps_per_epoch=10)
   
   eval_loss, eval_acc = multi_worker_model.evaluate(test_dataset_sharded, 
                                                     verbose=0, steps=10)
@@ -110,10 +97,9 @@ if __name__ == '__main__':
   parser.add_argument(
         "--batch_size",
         type=int,
-        default=64,
+        default=128,
         metavar="N",
-        help="Batch size for training (default: 64)",
-    )
+        help="Batch size for training (default: 64)")
   parser.add_argument("--learning_rate", 
                       type=float,  
                       default=0.001,
